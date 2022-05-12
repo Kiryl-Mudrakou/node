@@ -16,6 +16,9 @@ async function write() {
       .on('data',(data)=> {
         writeText.write(data)
       })
+      .subscribe((jsonObj) => {
+        delete jsonObj['amount'];
+      })
       .on('error', util)
   )
 }
