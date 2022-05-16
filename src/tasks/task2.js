@@ -1,26 +1,18 @@
-const { pipeline } = require('stream');
-const fs = require('fs');
-const csv = require('csvtojson');
-const paths = require('./constants');
-const util = require('./errors');
+import { pipeline } from 'stream';
+import fs from 'fs';
+import csv from 'csvtojson';
 
-const writeText = fs.createWriteStream(paths.BASE_CSV_TEXT);
+const BASE_CSV_PATH = "./files/csv/csv.csv";
+const BASE_CSV_TEXT = "./files/text/text.txt";
 
-async function write() {
-  await pipeline(
-    csv().fromFile(paths.BASE_CSV_PATH).preFileLine((fileLineString,  lineIdx)=>{
-      if (lineIdx === 0) {
-        return fileLineString.replace('Book,Author,Amount,Price', 'book,author,amount,price');
-      }
-      return fileLineString})
-      .on('data',(data)=> {
-        writeText.write(data)
-      })
-      .subscribe((jsonObj) => {
-        delete jsonObj['amount'];
-      })
-      .on('error', util)
-  )
-}
+pipeline(
+  csv({
+    noheader: false,
+    headers: ["book", "author", "amount", "price"],
+    ignoreColumns: /(Amount|amount)/
+  })
+    .fromFile(BASE_CSV_PATH),
+  fs.createWriteStream(BASE_CSV_TEXT),
+  err => console.error(err)
+)
 
-write();
