@@ -86,6 +86,22 @@ app.put('/users/change/:id',  validator.body(validation),(req, res) => {
     }
 });
 
+
+const searchUser = (login:string, limit: number)=> {
+    let sortedUsers = users.filter(user => {
+        return user.login.indexOf(login) !== -1;
+    })
+    sortedUsers.sort((a, b) => a.login > b.login ? 1 : -1);
+    return sortedUsers.length <= limit ? sortedUsers : sortedUsers.slice(0,limit);
+}
+
+app.post('/users/search/', (req, res) => {
+   const login = req.body.login;
+   const limit = req.body.limit || 3;
+
+   res.send(searchUser(login, limit));
+})
+
 app.listen(port, () => {
     console.log(`Server successfully started on ${port} port `);
 });
