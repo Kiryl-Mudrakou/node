@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "login": "Mikl",
+    "age": "35",
+    "password": "qwerty",
+    "isDeleted": false
+  },
+  {
+    "id": "2",
+    "login": "Alex",
+    "age": "25",
+    "password": "qwerty",
+    "isDeleted": false
+  },
+  {
+    "id": "3",
+    "login": "Mike",
+    "age": "45",
+    "password": "qwerty",
+    "isDeleted": false
+  }
+]
