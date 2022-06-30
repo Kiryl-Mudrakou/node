@@ -1,4 +1,9 @@
-import * as Joi from 'joi';
+const Joi = require("joi");
+
+const queryParamSchema = Joi.object({
+    query: Joi.string().required()
+});
+
 
 const validation = Joi.object().keys({
     login: Joi.string().required(),
@@ -12,4 +17,4 @@ const validation = Joi.object().keys({
         .required()
 });
 
-module.exports = validation;
+export { queryParamSchema, validation};
