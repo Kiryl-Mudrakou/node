@@ -7,11 +7,14 @@ const userModel = require('../model/userModel');
 const userService = new UserService(userModel);
 
 
-routers.get("/", (req, res) => {
+routers.get("/", async (req, res) => {
 
-  userService.getAll().then((users: any) => {
+  try {
+    const users = await userService.getAll();
     res.send(users);
-  });
+  } catch (e) {
+    res.status(400).end();
+  }
 });
 
 // @ts-ignore

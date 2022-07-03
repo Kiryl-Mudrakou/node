@@ -8,7 +8,7 @@ const userService = new UserService(userModel);
 
 const userSchema = require('../validators/validator').validation;
 
-userRouter.get('/:id', (req, res) => {
+userRouter.get('/:id', async (req, res) => {
   const id = req.params.id;
   // @ts-ignore
   userService.getUser(id).then((user: any) => {
@@ -20,44 +20,52 @@ userRouter.get('/:id', (req, res) => {
   });
 });
 
-userRouter.post('/', validator.body(userSchema), (req, res) => {
-  const body = req.body;
-  userService.createUser(body).then((user: any) => res.send(user));
-});
-
-userRouter.put('/:id', validator.body(userSchema), (req, res) => {
-  const body = req.body;
-  const id = req.params.id;
-  // @ts-ignore
-  userService.updateUser(id, body).then((user: any) => {
-    if (!user) {
-      return res.status(404).end();
-    }
-    res.send(user);
-  });
-});
-
-userRouter.delete('/:id', (req, res) => {
-  const id = req.params.id;
-  // @ts-ignore
-  userService.deleteUser(id).then((user: any) =>{ if (!user) {
-    return res.status(404).end();
+userRouter.post('/', validator.body(userSchema), async (req, res) => {
+  const passedUserData = req.body;
+  try {
+  const users = await userService.createUser(passedUserData);
+    res.send(users);
+  } catch (e) {
+    res.status(400).end();
   }
-    res.send({ success: true });})
-
 });
 
-userRouter.get('/', (req, res) => {
+userRouter.put('/:id', validator.body(userSchema), async (req, res) => {
+  const passedUserData = req.body;
+  const id = req.params.id;
+  // @ts-ignore
+
+  try {
+    const user = await userService.updateUser(id, passedUserData);
+    res.send(user);
+  } catch (e) {
+    res.status(400).end();
+  }
+});
+
+userRouter.delete('/:id', async (req, res) => {
+  const id = req.params.id;
+  // @ts-ignore
+
+  try {
+    const user = await userService.deleteUser(id);
+    res.send({ user, success: true });
+  } catch (e) {
+    res.status(400).end();
+  }
+});
+
+userRouter.get('/', async (req, res) => {
   const login = req.query.login;
   const limit = req.query.limit || 10
-  // @ts-ignore
-  userService.searchUser(login, limit).then((user: any) => {
-    if (!user) {
-      return res.status(404).end();
-    } else {
-      res.send(user);
-    }
-  });
+
+  try {
+    // @ts-ignore
+    const user = await userService.searchUser(login, limit);
+    res.send(user);
+  } catch (e) {
+    res.status(400).end();
+  }
 });
 
 userRouter.all('*', (req, res) => {
