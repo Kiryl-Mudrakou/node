@@ -1,8 +1,10 @@
-import * as express from 'express';
-const bodyParser = require('body-parser');
+import * as express from "express";
+import { routers } from '../routers/routs';
+import { userRouter }  from '../routers/user.routers';
+import { groupsRouter }  from '../routers/groups.routers';
+import {permissionRouter} from "../routers/permission.routers";
 
-import { routers } from '../routs/routs';
-import { userRouter }  from '../routs/userRouts';
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -11,8 +13,9 @@ const PORT = '9000';
 app.use(bodyParser.json());
 
 app.use('/users', routers);
-
 app.use('/user', userRouter);
+app.use('/groups', groupsRouter);
+app.use('/permissions', permissionRouter);
 
 app.all("*", (req, res) => {
   return res.status(404).end();
