@@ -9,20 +9,20 @@ export const groupsRouter = express.Router();
 
 groupsRouter.get('/', async (req: Request, res: Response) => {
   const groups = await service.getAll();
-  res.status(200).send(groups);
+  res.send(groups);
 });
 
 groupsRouter.get('/:id', async (req: Request, res: Response) => {
 
   const group = await service.getGroupById(+req.params.id);
-  res.status(200).send(group);
+  res.send(group);
 
 });
 
 groupsRouter.post('/', async (req: Request, res: Response) => {
   const group: IGroup = req.body;
   const newGroupId = await service.createGroup(group);
-  res.status(200).json({id: newGroupId});
+  res.send({id: newGroupId});
 
 });
 
@@ -30,11 +30,11 @@ groupsRouter.post('/', async (req: Request, res: Response) => {
 groupsRouter.put('/:id', async (req: Request, res: Response) => {
   const groupUpdate: IGroup = req.body;
   const updatedGroup = await service.updateGroup(+req.params.id, groupUpdate);
-  return res.status(200).json(updatedGroup);
+  return res.send(updatedGroup);
 });
 
 
 groupsRouter.delete('/:id', async (req: Request, res: Response) => {
   const deletedGroupId = await service.deleteGroup(+req.params.id);
-  return res.status(200).send({id: deletedGroupId});
+  return res.send({id: deletedGroupId});
 });
