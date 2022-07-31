@@ -1,8 +1,9 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Users', [
+    return queryInterface.bulkInsert('users', 
+      [
       {
-        id: '1123124-asdfg-124',
+        id: 1,
         login: 'John',
         password: 'somePassword',
         age: '24',
@@ -11,7 +12,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: '112-asdfasf-13124-asdfg-124',
+        id: 2,
         login: 'Some',
         password: 'somePassword',
         age: '27',
@@ -20,7 +21,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: 'asdfg-124',
+        id: 3,
         login: 'Name',
         password: 'somePassword',
         age: '14',
@@ -29,7 +30,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        id: '1123124-asdfg-asdgfa-12r1-asda',
+        id: 4,
         login: 'nameNew',
         password: 'somePassword',
         age: '35',
@@ -37,9 +38,10 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-    ]);
+    ]
+    );
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Users', null, {});
+    return queryInterface.bulkDelete('users', null, {});
   }
 };
