@@ -10,7 +10,7 @@ permissionRouter.post('/', async (req: Request, res: Response) => {
     const userId = req.body.userId;
     const groupId = req.body.groupId;
     const group = service.addUserToGroup(userId, groupId)
-    res.json(group);
+    res.send(group);
 });
 
 permissionRouter.get('/', async (req: Request, res: Response) => {
