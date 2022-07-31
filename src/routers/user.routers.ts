@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import {NextFunction, Request, Response} from 'express';
 import { UserService} from '../service/user.service';
 import * as express from "express";
 
@@ -8,61 +8,42 @@ const validator = require('express-joi-validation').createValidator({});
 
 const userSchema = require('../validators/validator').validation;
 
-userRouter.get('/:id', async (req: Request, res: Response,) => {
+userRouter.get('/:id', async (req: Request, res: Response,   next: NextFunction) => {
   const id = +req.params.id;
   // @ts-ignore
-  await userService.getUser(id).then((user) => {
+  userService.getUser(id).then((user) => {
     if (!user) {
       return res.status(404).end();
     } else {
      res.send(user);
     }
-  });
+  }).catch(error => next(error));
 });
 
-userRouter.post('/', validator.body(userSchema), async (req:Request, res: Response) => {
+userRouter.post('/', validator.body(userSchema), async (req:Request, res: Response,   next: NextFunction) => {
   const passedUserData = req.body;
-  try {
-  const users = await userService.createUser(passedUserData);
-    res.send(users);
-  } catch (e) {
-    res.status(400).end();
-  }
+
+  userService.createUser(passedUserData).then(users => res.send(users)).catch(error => next(error));
 });
 
-userRouter.put('/:id', validator.body(userSchema), async(req:Request, res: Response) => {
+userRouter.put('/:id', validator.body(userSchema), async(req:Request, res: Response,   next: NextFunction) => {
   const passedUserData = req.body;
   const id = +req.params.id;
 
-  try {
-    const user = await userService.updateUser(id, passedUserData);
-    res.send(user);
-  } catch (e) {
-    res.status(400).end();
-  }
+  userService.updateUser(id, passedUserData).then(users => res.send(users)).catch(error => next(error));
 });
 
-userRouter.delete('/:id', async (req:Request, res: Response) => {
+userRouter.delete('/:id', async (req:Request, res: Response,   next: NextFunction) => {
   const id = +req.params.id;
 
-  try {
-    const user = await userService.deleteUser(id);
-    res.send({ user, success: true });
-  } catch (e) {
-    res.status(400).end();
-  }
+  userService.deleteUser(id).then(user => res.send({ user, success: true })).catch(error => next(error));
 });
 
-userRouter.get('/', async (req:Request, res: Response) => {
+userRouter.get('/', async (req:Request, res: Response,   next: NextFunction) => {
   const login = req.query.login;
   const limit = req.query.limit || 10
 
-  try {
-    const user = await userService.searchUser(typeof login === "string" ? login : '', limit);
-    res.send(user);
-  } catch (e) {
-    res.status(400).end();
-  }
+  userService.searchUser(typeof login === "string" ? login : '', limit).then(user => res.send(user)).catch(error => next(error));
 });
 
 userRouter.all('*', (req:Request, res: Response) => {

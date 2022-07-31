@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import {Request, Response, NextFunction} from 'express';
 import * as express from "express";
 import {GroupService} from '../service/group.service';
 import {IGroup} from "../interfeces/IUsers";
@@ -7,34 +7,38 @@ const service = new GroupService();
 
 export const groupsRouter = express.Router();
 
-groupsRouter.get('/', async (req: Request, res: Response) => {
-  const groups = await service.getAll();
-  res.send(groups);
+groupsRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+ service.getAll().then((groups) => {
+   res.send(groups);
+ }).catch(error => next(error));
 });
 
-groupsRouter.get('/:id', async (req: Request, res: Response) => {
+groupsRouter.get('/:id', async (req: Request, res: Response,  next: NextFunction) => {
 
-  const group = await service.getGroupById(+req.params.id);
-  res.send(group);
-
+  service.getGroupById(+req.params.id).then(group => {
+    res.send(group);
+  }).catch(error => next(error));
 });
 
-groupsRouter.post('/', async (req: Request, res: Response) => {
+groupsRouter.post('/', async (req: Request, res: Response,  next: NextFunction) => {
   const group: IGroup = req.body;
-  const newGroupId = await service.createGroup(group);
-  res.send({id: newGroupId});
-
+  service.createGroup(group).then(newGroupId => {
+    res.send( newGroupId);
+  }).catch(error => next(error));
 });
 
 
-groupsRouter.put('/:id', async (req: Request, res: Response) => {
+groupsRouter.put('/:id', async (req: Request, res: Response,  next: NextFunction) => {
   const groupUpdate: IGroup = req.body;
-  const updatedGroup = await service.updateGroup(+req.params.id, groupUpdate);
-  return res.send(updatedGroup);
+
+  service.updateGroup(+req.params.id, groupUpdate).then(updatedGroup => {
+    res.json(updatedGroup);
+  }).catch(error => next(error));
 });
 
 
-groupsRouter.delete('/:id', async (req: Request, res: Response) => {
-  const deletedGroupId = await service.deleteGroup(+req.params.id);
-  return res.send({id: deletedGroupId});
+groupsRouter.delete('/:id', async (req: Request, res: Response,  next: NextFunction) => {
+  service.deleteGroup(+req.params.id).then(deletedGroupId => {
+    res.send( deletedGroupId)
+  }).catch(error => next(error));
 });
