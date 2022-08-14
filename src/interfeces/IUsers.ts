@@ -24,5 +24,3 @@ export interface IPermission{
   userId: number,
   groupId: number
 }
-
-
