@@ -18,14 +18,15 @@ const PORT = '9000';
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(errorHandler);
-app.use(log);
 
 app.use('/users', jwtValidator, routers);
 app.use('/user', jwtValidator, userRouter);
 app.use('/groups', jwtValidator, groupsRouter);
 app.use('/permissions', jwtValidator, permissionRouter);
 app.use('/login', loginRouter);
+
+app.use(errorHandler);
+app.use(log);
 
 process.on('unhandledRejection',(e,origin)=>{
   logger.error('Winston unhandled rejection Logger...',e,origin);
