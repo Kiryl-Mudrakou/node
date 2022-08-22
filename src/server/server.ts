@@ -6,7 +6,9 @@ import {permissionRouter} from "../routers/permission.routers";
 import { errorHandler } from '../middlewares/errorHandler';
 import { logger } from "../middlewares/winstonLogger";
 import { log } from "../middlewares/loger";
-
+import * as cors from 'cors'
+import {loginRouter} from "../routers/login.routes";
+import {jwtValidator} from "../middlewares/jwtValidator";
 
 const bodyParser = require('body-parser');
 
@@ -14,14 +16,17 @@ const app = express();
 
 const PORT = '9000';
 
+app.use(cors());
 app.use(bodyParser.json());
+
+app.use('/users', jwtValidator, routers);
+app.use('/user', jwtValidator, userRouter);
+app.use('/groups', jwtValidator, groupsRouter);
+app.use('/permissions', jwtValidator, permissionRouter);
+app.use('/login', loginRouter);
+
 app.use(errorHandler);
 app.use(log);
-
-app.use('/users', routers);
-app.use('/user', userRouter);
-app.use('/groups', groupsRouter);
-app.use('/permissions', permissionRouter);
 
 process.on('unhandledRejection',(e,origin)=>{
   logger.error('Winston unhandled rejection Logger...',e,origin);

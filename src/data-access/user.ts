@@ -25,9 +25,7 @@ export const create = async (user: IUser): Promise<IUser> => {
 export const remove = async (id: number) => {
   let user = await User.update(
     { isDeleted: true },
-    {
-      where: { id },
-    }
+    { where: { id } }
   );
   return user[0];
 }
@@ -45,11 +43,19 @@ export const update = async (id: number, updatedUser: IUser) =>{
   }
 }
 
-export const findAll = async (login: string, limit: number) => {
+export const findByLogin = async (login: string) => {
+  return await User.findOne( {
+    where: {
+      login
+    }
+  })
+}
+
+export const findAll = async (searchSubLogin: string, limit: number) => {
   const iLike = Op.iLike;
   return await User.findAll({
     limit: limit,
-    where: {login: {[iLike]: login + "%"}, isDeleted: false},
+    where: {login: {[iLike]: searchSubLogin + "%"}, isDeleted: false},
     order: [
       ['login', 'ASC'],
     ],

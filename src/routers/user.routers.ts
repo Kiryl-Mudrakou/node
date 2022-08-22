@@ -10,6 +10,7 @@ const userSchema = require('../validators/validator').validation;
 
 userRouter.get('/:id', async (req: Request, res: Response,   next: NextFunction) => {
   const id = +req.params.id;
+  console.log(id)
   // @ts-ignore
   userService.getUser(id).then((user) => {
     if (!user) {
