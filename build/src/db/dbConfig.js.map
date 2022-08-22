@@ -1,0 +1,1 @@
+{"version":3,"file":"dbConfig.js","sourceRoot":"","sources":["../../../src/db/dbConfig.ts"],"names":[],"mappings":";;;AAAA,MAAM,QAAQ,GAAG;IACf,QAAQ,EAAC,OAAO;IAChB,IAAI,EAAC,UAAU;IACf,QAAQ,EAAC,MAAM;IACf,IAAI,EAAC,WAAW;IAChB,IAAI,EAAE,IAAI;IACV,OAAO,EAAG,UAAU;IACpB,QAAQ,EAAC,UAAU;CACpB,CAAA;AAEO,4BAAQ"}

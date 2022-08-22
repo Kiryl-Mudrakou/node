@@ -9,12 +9,13 @@ import { log } from "../middlewares/loger";
 import * as cors from 'cors'
 import {loginRouter} from "../routers/login.routes";
 import {jwtValidator} from "../middlewares/jwtValidator";
+import 'dotenv/config';
 
 const bodyParser = require('body-parser');
 
 const app = express();
 
-const PORT = '9000';
+//const PORT = '9000';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -40,6 +41,6 @@ app.all("*", (req, res) => {
   return res.status(404).end();
 });
 
-app.listen(PORT,() => {
-  console.log('server listening on port number ', PORT);
+app.listen(process.env.SERVER_PORT,() => {
+  console.log('server listening on port number ', process.env.SERVER_PORT);
 });
