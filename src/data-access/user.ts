@@ -1,50 +1,35 @@
-import { Op } from 'sequelize';
-import { User } from '../models/user.model';
-import { IUser } from "../interfeces/IUsers";
+import {Op} from 'sequelize';
+import {User} from '../models/user.model';
+import {IUser} from "../interfeces/IUsers";
 
 export const findOne = async (id: number) => {
-  try {
-    return await User.findOne({
-    where: { id }
+  return await User.findOne({
+    where: {id}
   })
-  } catch(error){
-    console.log(error);
-    throw error;
-  }
 }
 
 export const create = async (user: IUser): Promise<IUser> => {
-  try{
-    return await User.create(user);
-  }catch(error){
-    console.log(error);
-    throw error;
-  }
+  return await User.create(user);
 }
 
 export const remove = async (id: number) => {
   let user = await User.update(
-    { isDeleted: true },
-    { where: { id } }
+    {isDeleted: true},
+    {where: {id}, returning: true}
   );
   return user[0];
 }
 
-export const update = async (id: number, updatedUser: IUser) =>{
-  try {
-    const user = await User.update(updatedUser, {
-      where: { id, isDeleted: false },
-      returning: true
-    });
-    return user ? user[1] : null;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+export const update = async (id: number, updatedUser: IUser) => {
+  const user = await User.update(updatedUser, {
+    where: {id, isDeleted: false},
+    returning: true
+  });
+  return user ? user[1] : null;
 }
 
 export const findByLogin = async (login: string) => {
-  return await User.findOne( {
+  return await User.findOne({
     where: {
       login
     }
@@ -63,12 +48,7 @@ export const findAll = async (searchSubLogin: string, limit: number) => {
 }
 
 export const getAll = async (): Promise<IUser[]> => {
-  try {
-    return await User.findAll({
-      where: {}
-    });
-  } catch(error){
-    console.log(error);
-    throw error;
-  }
+  return await User.findAll({
+    where: {}
+  });
 }

@@ -1,57 +1,61 @@
 import { findOne, create, remove, update, findAll, getAll, findByLogin} from "./user";
 
-jest.mock('./user', () => ({
-  findOne: jest.fn(),
-  create: jest.fn(),
-  remove: jest.fn(),
-  update: jest.fn(),
-  findAll: jest.fn(),
-  getAll: jest.fn(),
-  findByLogin: jest.fn(),
-}))
 const user = {login: 'st', age: 19, id: 1, isDeleted: false, password:'124asd '};
+jest.mock('../models/user.model', () => ({
+    User: {
+      findOne: jest.fn().mockReturnValue(Promise.resolve({login: 'st', age: 19, id: 1, isDeleted: false, password:'124asd '})),
+      create: jest.fn().mockReturnValue(Promise.resolve({login: 'st', age: 19, id: 1, isDeleted: false, password:'124asd '})),
+      update: jest.fn().mockReturnValue(Promise.resolve([{login: 'st', age: 19, id: 1, isDeleted: true, password:'124asd '}, {login: 'st', age: 25, id: 1, isDeleted: false, password:'124asd '}])),
+      findAll: jest.fn().mockReturnValue(Promise.resolve([{login: 'some', age: 19, id: 1, isDeleted: true, password:'124asd '}, {login: 'some', age: 25, id: 1, isDeleted: false, password:'124asd '}])),
+    }
+}))
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe("User", () => {
 
   it("it should find user", async () => {
-    await findOne(1);
+    const result = await findOne(1);
 
-    expect(findOne).toHaveBeenCalledWith(1);
+    expect(result).toEqual(user);
   });
 
   it("it should create user", async () => {
-    await create(user);
+    const result = await create(user);
 
-    expect(create).toHaveBeenCalledWith(user);
+    expect(result).toEqual(user);
   });
 
-  it("it should remove user", async () => {
-    await remove(1);
 
-    expect(remove).toHaveBeenCalledWith(1);
+  it("it should remove user", async () => {
+    const result = await remove(1);
+
+    expect(result).toEqual({login: 'st', age: 19, id: 1, isDeleted: true, password:'124asd '});
   });
 
   it("it should update user", async () => {
-    await update(1, user );
+    const result = await update(1, {login: 'st', age: 25, id: 1, isDeleted: false, password:'124asd '} );
 
-    expect(update).toHaveBeenCalledWith(1, user);
+    expect(result).toEqual({login: 'st', age: 25, id: 1, isDeleted: false, password:'124asd '});
   });
 
   it("it should findAll users", async () => {
-    await findAll('some', 1);
+    const result = await findAll('some', 1);
 
-    expect(findAll).toHaveBeenCalledWith('some', 1);
+    expect(result).toEqual([{login: 'some', age: 19, id: 1, isDeleted: true, password:'124asd '}, {login: 'some', age: 25, id: 1, isDeleted: false, password:'124asd '}]);
   });
 
   it("it should getAll users", async () => {
-    await getAll();
+    const result = await getAll();
 
-    expect(getAll).toHaveBeenCalledTimes(1);
+    expect(result).toEqual([{login: 'some', age: 19, id: 1, isDeleted: true, password:'124asd '}, {login: 'some', age: 25, id: 1, isDeleted: false, password:'124asd '}]);
   });
 
   it("it should findByLogin user", async () => {
-    await findByLogin('name');
+    const result = await findByLogin('st');
 
-    expect(findByLogin).toHaveBeenCalledWith('name');
+    expect(result).toEqual({"age": 19, "id": 1, "isDeleted": false, "login": "st", "password": "124asd "});
   });
 });

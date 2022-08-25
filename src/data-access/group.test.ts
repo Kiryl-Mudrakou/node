@@ -1,6 +1,6 @@
 import { getAll, getById, createOne, updateOne, deleteOne,} from "./group";
 
-jest.mock('./group', () => ({
+jest.mock('../models/group.model', () => ({
   getById: jest.fn(),
   createOne: jest.fn(),
   updateOne: jest.fn(),
