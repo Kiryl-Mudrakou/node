@@ -1,11 +1,10 @@
 const Joi = require("joi");
 
-const queryParamSchema = Joi.object({
+export const queryParamSchema = Joi.object({
     query: Joi.string().required()
 });
 
-
-const validation = Joi.object().keys({
+export const validation = Joi.object().keys({
     login: Joi.string().required(),
     password: Joi.string()
         .regex(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/)
@@ -17,4 +16,9 @@ const validation = Joi.object().keys({
         .required()
 });
 
-export { queryParamSchema, validation};
+export const loginValidator =  Joi.object().keys({
+    login: Joi.string().required(),
+    password: Joi.string()
+      .regex(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/)
+      .required()
+});
