@@ -59,12 +59,11 @@ describe("User router", () => {
   it("it should create user", async () => {
     const user = new UserService();
     const res = await request(app)
-      .post('/user/').send({age: 19, login: "sdat", password: "124asd "})
+      .post('/user/').send({age: 19, login: "sdat", password: "124asd"})
       .type('form')
     const result = await user.createUser({login: 'st', age: 19, id: 1, isDeleted: false, password: '124asd '})
 
-
-    expect(res).toEqual(200);
+    expect(res.status).toEqual(200);
     expect(result).toEqual({"age": 19, "id": 1, "isDeleted": false, "login": "st", "password": "124asd "});
     expect(userServiceCreateMock).toHaveBeenCalled();
   });
@@ -88,7 +87,10 @@ describe("User router", () => {
     });
 
     const result = await user.updateUser(4,{login: 'st', age: 19, password: '124asd '})
+    const res = await request(app)
+      .put('/user/4').send({login: 'st', age: 19,password: 'somePassword3'}).type('form')
 
+    expect(res.status).toEqual(200);
     expect(result).toEqual( [{"age": 19, "id": 4, "isDeleted": false, "login": "st", "password": "124asd "}]);
     expect(userServiceUpdateMock).toHaveBeenCalled();
   });
