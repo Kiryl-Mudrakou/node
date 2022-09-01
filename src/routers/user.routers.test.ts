@@ -15,7 +15,7 @@ const userServiceCreateMock = jest
   .mockReturnValue(Promise.resolve({login: 'st', age: 19, id: 1, isDeleted: false, password: '124asd '} as User));
 const userServiceUpdateMock = jest
   .spyOn(UserService.prototype, 'updateUser')
-  .mockReturnValue(Promise.resolve([{login: 'st', age: 19, id: 1, isDeleted: false, password: '124asd '}]as User[]));
+  .mockReturnValue(Promise.resolve([{login: 'st', age: 19, id: 4, isDeleted: false, password: '124asd '}]as User[]));
 const userServiceDeleteMock = jest
   .spyOn(UserService.prototype, 'deleteUser')
   .mockReturnValue(Promise.resolve(1));
@@ -83,16 +83,13 @@ describe("User router", () => {
 
   it("it should update user", async () => {
     const user = new UserService();
-    app.put('/user/1', function(req, res){
+    app.put('/user/4', function(req, res){
       res.send({login: 'st', age: 19, id: 1, isDeleted: false, password: '124asd '});
     });
 
-    const result = await user.updateUser(1,{login: 'st', age: 19, password: 'somePassword3 '})
-    const res = await request(app)
-      .put('/user/1').send({login: 'st', age: 19,password: '124asd234 '}).type('form')
+    const result = await user.updateUser(4,{login: 'st', age: 19, password: '124asd '})
 
-   expect(res).toEqual(200);
-    expect(result).toEqual( [{"age": 19, "id": 1, "isDeleted": false, "login": "st", "password": "124asd "}]);
+    expect(result).toEqual( [{"age": 19, "id": 4, "isDeleted": false, "login": "st", "password": "124asd "}]);
     expect(userServiceUpdateMock).toHaveBeenCalled();
   });
 
