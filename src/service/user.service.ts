@@ -2,27 +2,27 @@ import { create, findOne, remove, update, findAll, getAll} from '../data-access/
 
 export class UserService {
 
-  createUser(payload: any) {
+  public createUser(payload: any) {
     return create(payload);
   }
 
-  getUser(id: number) {
+  public getUser(id: number) {
     return findOne(id);
   }
 
-  deleteUser(id: number) {
+  public deleteUser(id: number) {
     return remove(id);
   }
 
-  updateUser(id: number, payload: any) {
+  public updateUser(id: number, payload: any) {
     return update(id, payload);
   }
 
-  searchUser(login: string, limit: any) {
+  public searchUser(login: string, limit: any) {
     return findAll(login, limit);
   }
 
-  getAll() {
+  public getAll() {
     return getAll();
   }
 }

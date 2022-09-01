@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import { UserService} from '../service/user.service';
+import { UserService } from '../service/user.service';
 import * as express from "express";
 
 const userService = new UserService();
@@ -10,7 +10,6 @@ const userSchema = require('../validators/validator').validation;
 
 userRouter.get('/:id', async (req: Request, res: Response,   next: NextFunction) => {
   const id = +req.params.id;
-  console.log(id)
   // @ts-ignore
   userService.getUser(id).then((user) => {
     if (!user) {
